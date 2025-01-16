@@ -1,0 +1,121 @@
+﻿@model IEnumerable<LaboJLevecq.Models.CoffretListItem>
+
+@{
+    ViewData["Title"] = "Coffret List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!-- Table for available coffrets -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Synopsis</th>
+            <th>Genre</th>
+            <th>Affiche</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Quantite > 0)
+            {
+                <tr>
+                    <td>@Html.ActionLink($"{item.Titre}", "Details", new { id = item.Id })</td>
+                    <td>@item.Prix.ToString("C")</td>
+                    <td>@item.Quantite</td>
+                    <td>@item.Synopsis</td>
+                    <td>@item.Genre</td>
+                    <td><img src="@item.AfficheUrl" alt="Image" class="img-fluid img-thumbnail rounded mx-auto d-block"></td>
+                    <td>
+                        <!-- Actions -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">
+                            Supprimer
+                        </button>
+                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning btn-sm mt-2">
+                            Mettre à jour
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel-@item.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel-@item.Id">Supprimer un coffret</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr(e) de vouloir supprimer ce coffret ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non, je ne veux pas supprimer</button>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Oui, supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Accordion for unavailable coffrets -->
+<h2>Coffrets hors stock</h2>
+<div class="accordion" id="accordionExample">
+    @foreach (var item in Model)
+    {
+        if (item.Quantite == 0)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-@item.Id">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@item.Id" aria-expanded="false" aria-controls="collapse-@item.Id">
+                        @item.Titre
+                    </button>
+                </h2>
+                <div id="collapse-@item.Id" class="accordion-collapse collapse" aria-labelledby="heading-@item.Id" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Prix:</strong> @item.Prix.ToString("C")<br />
+                        <strong>Synopsis:</strong> @item.Synopsis<br />
+                        <strong>Genre:</strong> @item.Genre<br />
+                        <strong>Affiche:</strong><br />
+                        <img src="@item.AfficheUrl" alt="Image" class="img-fluid img-thumbnail rounded mx-auto d-block">
+                    </div>
+                    <div class="accordion-footer mt-3">
+                        <!-- Update and Delete buttons for out-of-stock coffrets -->
+                        <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning mt-2">
+                            Mettre à jour
+                        </a>
+                        <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel-@item.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel-@item.Id">Supprimer un coffret</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr(e) de vouloir supprimer ce coffret ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non, je ne veux pas supprimer</button>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Oui, supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

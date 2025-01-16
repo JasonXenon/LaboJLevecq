@@ -1,0 +1,18 @@
+﻿@model LaboJLevecq.Models.Coffret
+
+@{
+    ViewData["Title"] = "Mettre à jour le coffret";
+}
+
+<h1>@ViewData["Title"] : @Model.Titre</h1>
+
+<!-- Formulaire de mise à jour -->
+<form method="post" asp-action="Update" asp-route-id="@Model.Id">
+     <div class="form-group">
+        <label for="Quantite">Quantité</label>
+        <input type="number" class="form-control" id="Quantite" name="Quantite" value="@Model.Quantite" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Mettre à jour</button>
+    <a class="btn btn-secondary mt-2" asp-action="Index">Back to List</a>
+</form>

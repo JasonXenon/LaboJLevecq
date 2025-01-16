@@ -1,0 +1,36 @@
+﻿@model LaboJLevecq.Models.Genre
+
+@{
+    ViewData["Title"] = "Ajouter un Genre";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (ViewData["error"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["error"]
+    </div>
+}
+
+@if (TempData["successMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["successMessage"]
+    </div>
+}
+
+<form asp-action="AddGenre" method="post">
+    <div class="form-group">
+        <label asp-for="Nom" class="control-label">Nom du Genre</label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Ajouter</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
